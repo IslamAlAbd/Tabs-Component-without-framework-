@@ -392,3 +392,41 @@ input:checked + .slider:before {
     transform: translateY(0);
   }
 }
+.rating-container {
+  text-align: center;
+}
+
+.stars {
+  position: relative;
+  display: inline-block;
+  font-size: 50px;
+  cursor: pointer;
+  user-select: none;
+  direction: ltr;
+}
+
+.star-layer {
+  white-space: nowrap;
+}
+
+.empty {
+  color: #ccc;
+}
+
+.filled {
+  color: #ffc107;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%; /* سنغير هذا عبر JS */
+  overflow: hidden;
+  pointer-events: none; /* لكي لا تعيق النجوم الملونة حركة الماوس */
+  transition: width 0.1s ease-out;
+}
+
+#rating-text {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+}

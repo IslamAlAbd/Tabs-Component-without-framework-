@@ -30,8 +30,15 @@ const tabs = [
       </div>`,
   },
   {
-    label: "javascript",
-    content: `<div>JavaScript Content</div>`,
+    label: "Evaluation",
+    content: `<div class="rating-container">
+        <h1>Rate Our Services </h1>
+        <div class="stars" id="star-container">
+            <div class="star-layer empty">★★★★★</div>
+            <div class="star-layer filled" id="star-filled">★★★★★</div>
+        </div>
+        <p id="rating-text">Waiting for your Rating</p>
+    </div>`,
   },
 ];
 function buildTabs(containerId, tabData) {
@@ -303,3 +310,47 @@ window.deleteAlarm = (id) => {
 
 updateClock();
 setInterval(updateClock, 1000);
+
+
+
+
+const container = document.getElementById("star-container");
+const filledStars = document.getElementById("star-filled");
+const ratingText = document.getElementById("rating-text");
+
+let currentRating = 0; 
+
+const updateLabel = (starsCount) => {
+  if (starsCount <= 1.5) return "bad";
+  if (starsCount <= 3.5) return "good";
+  return "excelent";
+};
+
+container.addEventListener("mousemove", (e) => {
+  const rect = container.getBoundingClientRect();
+  let x = e.clientX - rect.left; 
+
+  let widthPercent = (x / rect.width) * 100;
+
+  let snapPercent = Math.ceil(widthPercent / 10) * 10;
+
+  snapPercent = Math.max(0, Math.min(100, snapPercent));
+
+  filledStars.style.width = `${snapPercent}%`;
+});
+
+container.addEventListener("mouseleave", () => {
+  filledStars.style.width = `${currentRating}%`;
+});
+
+container.addEventListener("click", (e) => {
+  const rect = container.getBoundingClientRect();
+  let x = e.clientX - rect.left;
+  let widthPercent = (x / rect.width) * 100;
+
+  currentRating = Math.ceil(widthPercent / 10) * 10;
+  filledStars.style.width = `${currentRating}%`;
+
+  const finalValue = (currentRating / 100) * 5;
+  ratingText.innerText = `Your Rating ${finalValue} - ${updateLabel(finalValue)}`;
+});
