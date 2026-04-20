@@ -4,11 +4,19 @@ const tabs = [
     content: `<div>Html content</div>`,
   },
   {
-    label: "Css",
-    content: `<div">css content</div>`,
+    label: "Count Characters",
+    content: `<div>
+        <h3>Count Characters<h3>
+        <textarea
+          id="text-input"
+          placeholder="Type something..."
+        ></textarea>
+        <p class="counter"><span id="char-count">0</span>/200 characters</p>
+        <button id="text-action-btn" type="button">Submit Text</button>
+      </div>`,
   },
   {
-    label: "Count Characters",
+    label: "javascript",
     content: `<div>JavaScript Content</div>`,
   },
 ];
@@ -103,3 +111,20 @@ function buildTabs(containerId, tabData) {
 }
 
 buildTabs("myTabs", tabs);
+
+const commentContainer = document.querySelector(".comment-container");
+const textarea = document.getElementById("text-input");
+const charCount = document.getElementById("char-count");
+const countText = document.querySelector(".counter");
+const textActionBtn = document.getElementById("text-action-btn");
+const maxCharacters = 200;
+
+function updateCharacterCounter() {
+  const length = textarea.value.length;
+  charCount.textContent = length;
+  countText.classList.toggle("counter-over-limit", length > maxCharacters);
+  textActionBtn.disabled = length > maxCharacters;
+}
+
+textarea.addEventListener("input", updateCharacterCounter);
+updateCharacterCounter();

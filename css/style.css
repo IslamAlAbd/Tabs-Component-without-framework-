@@ -122,3 +122,47 @@ body {
   background: #e9ecef;
   color: #333;
 }
+.comment-container {
+  margin-top: 20px;
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+  max-width: 100%;
+  width: 100%;
+}
+textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  font-size: 1em;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  resize: none;
+}
+.counter {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #555;
+}
+
+.counter-over-limit {
+  color: #d93025;
+  font-weight: 700;
+}
+
+#text-action-btn {
+  margin-top: 12px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #8447ff;
+  color: #fff;
+  cursor: pointer;
+}
+
+#text-action-btn:disabled {
+  background: #c8b9f5;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
