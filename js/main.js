@@ -1,7 +1,21 @@
 const tabs = [
   {
-    label: "HTML",
-    content: `<div>Html content</div>`,
+    label: "Set an Alarm",
+    content: `<div id="clock" class="clock">00:00:00</div>
+        <div class="line"></div>
+        <div class="alarm-input-area">
+          <div class="time-selectors">
+            <input type="number" id="alarmHour" placeholder="HH" min="1" max="24"/>
+            <input type="number" id="alarmMinute" placeholder="MM" min="0" max="59"/>
+          </div>
+          <button id="addAlarmBtn">Add Alarm</button>
+        </div>
+        <div id="alarmsList" class="alarms-list"></div>
+        <div id="ringingInterface">
+           <h2>Alarm is Ringing!</h2>
+          <button id="snoozeBtn">Snooze (2 min)</button>
+          <button id="stopBtn" >Stop</button>
+    </div>`,
   },
   {
     label: "Count Characters",
@@ -128,3 +142,164 @@ function updateCharacterCounter() {
 
 textarea.addEventListener("input", updateCharacterCounter);
 updateCharacterCounter();
+
+
+
+let alarms = [];
+const alarmSound = document.getElementById("alarmSound");
+let currentRingingAlarmId = null;
+
+const updateClock = () => {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2, "0");
+  const m = String(now.getMinutes()).padStart(2, "0");
+  const s = String(now.getSeconds()).padStart(2, "0");
+
+  document.querySelectorAll(".clock").forEach((clockElement) => {
+    clockElement.textContent = `${h}:${m}:${s}`;
+  });
+
+  alarms.forEach((alarm) => {
+    if (alarm.active && alarm.time === `${h}:${m}` && s === "00") {
+      ringAlarm(alarm.id);
+    }
+  });
+};
+
+const hourInput = document.getElementById("alarmHour");
+const minInput = document.getElementById("alarmMinute");
+
+// Pad on blur (when user leaves the field)
+hourInput.addEventListener("blur", () => {
+  if (hourInput.value) {
+    hourInput.value = String(parseInt(hourInput.value)).padStart(2, "0");
+  }
+});
+
+minInput.addEventListener("blur", () => {
+  if (minInput.value) {
+    minInput.value = String(parseInt(minInput.value)).padStart(2, "0");
+  }
+});
+
+document.getElementById("addAlarmBtn").addEventListener("click", () => {
+  const hrVal = parseInt(hourInput.value);
+  const minVal = parseInt(minInput.value);
+
+  if (
+    !hourInput.value ||
+    !minInput.value ||
+    hrVal < 1 ||
+    hrVal > 24 ||
+    minVal < 0 ||
+    minVal > 59
+  ) {
+    alert("Please enter valid time!");
+    return;
+  }
+
+  const hr = String(hrVal).padStart(2, "0");
+  const min = String(minVal).padStart(2, "0");
+  const formattedTime = `${hr}:${min}`;
+
+  const isDuplicate = alarms.some((alarm) => alarm.time === formattedTime);
+  if (isDuplicate) {
+    alert(`An alarm for ${formattedTime} already exists!`);
+    return;
+  }
+
+  const newAlarm = {
+    id: Date.now(),
+    time: `${hr}:${min}`,
+    active: true,
+  };
+
+  alarms.push(newAlarm);
+  renderAlarms();
+});
+
+function renderAlarms() {
+  const list = document.getElementById("alarmsList");
+  list.innerHTML = "";
+
+  alarms.forEach((alarm) => {
+    const item = document.createElement("div");
+    item.className = "alarm-item";
+    item.innerHTML = `
+            <div class="alarm-info">${alarm.time}</div>
+            <div class="alarm-controls">
+                <label class="switch">
+                    <input type="checkbox" ${alarm.active ? "checked" : ""} onchange="toggleAlarm(${alarm.id})">
+                    <span class="slider"></span>
+                </label>
+                <button class="delete-btn" onclick="deleteAlarm(${alarm.id})">🗑️</button>
+            </div>
+        `;
+    list.appendChild(item);
+  });
+}
+
+window.toggleAlarm = (id) => {
+  const alarm = alarms.find((a) => a.id === id);
+  if (alarm) alarm.active = !alarm.active;
+};
+
+window.deleteAlarm = (id) => {
+  alarms = alarms.filter((a) => a.id !== id);
+  renderAlarms();
+};
+
+function ringAlarm(id) {
+  currentRingingAlarmId = id;
+  alarmSound.currentTime = 0;
+  alarmSound.play().catch(() => {});
+  const ringUI = document.getElementById("ringingInterface");
+  if (ringUI) ringUI.style.display = "block";
+}
+
+const snoozeButton = document.getElementById("snoozeBtn");
+if (snoozeButton) {
+  snoozeButton.onclick = () => {
+    alarmSound.pause();
+    const ringUI = document.getElementById("ringingInterface");
+    if (ringUI) ringUI.style.display = "none";
+
+    const alarm = alarms.find((a) => a.id === currentRingingAlarmId);
+    if (alarm) {
+      let [h, m] = alarm.time.split(":").map(Number);
+      m += 2;
+      if (m >= 60) {
+        m -= 60;
+        h = (h + 1) % 24;
+      }
+      alarm.time = `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+      renderAlarms();
+      alert("Snoozed for 2 minutes!");
+    }
+  };
+}
+
+const stopButton = document.getElementById("stopBtn");
+if (stopButton) {
+  stopButton.onclick = () => {
+    alarmSound.pause();
+    const ringUI = document.getElementById("ringingInterface");
+    if (ringUI) ringUI.style.display = "none";
+    const alarm = alarms.find((a) => a.id === currentRingingAlarmId);
+    if (alarm) alarm.active = false;
+    renderAlarms();
+  };
+}
+
+window.toggleAlarm = (id) => {
+  const alarm = alarms.find((a) => a.id === id);
+  if (alarm) alarm.active = !alarm.active;
+};
+
+window.deleteAlarm = (id) => {
+  alarms = alarms.filter((a) => a.id !== id);
+  renderAlarms();
+};
+
+updateClock();
+setInterval(updateClock, 1000);

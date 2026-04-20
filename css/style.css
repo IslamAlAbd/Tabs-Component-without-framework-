@@ -166,3 +166,229 @@ textarea {
   cursor: not-allowed;
   opacity: 0.8;
 }
+.clock-container {
+  margin-top: 20px;
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+  max-width: 100%;
+  width: 100%;
+  text-align: center;
+}
+.clock,
+#clock {
+  font-size: 60px;
+  color: #8447ff;
+}
+.time {
+  font-size: 2rem;
+  margin: 20px 0;
+  color: #333;
+}
+
+.input-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.input-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+input[type="date"],
+input[type="time"] {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 200px;
+}
+
+.button-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+#clock {
+  font-size: 50px;
+  color: #d4c2fa;
+  text-align: center;
+  margin: 0 auto;
+  display: block;
+  text-shadow:
+    0 0 5px #844bf8,
+    0 0 10px #844bf8,
+    0 0 20px #f5f4f8,
+    0 0 40px #efeef0;
+}
+.line {
+  width: 80%;
+  height: 3px;
+  margin-top: 10px;
+
+  background: linear-gradient(90deg, transparent, #8447ff, transparent);
+  border-radius: 50px;
+
+  animation: glow 2s infinite;
+}
+@keyframes glow {
+  0% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.3;
+  }
+}
+
+.alarm-input-area {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+#ringingInterface{
+  display: none;
+  margin-top: 20px;
+  text-align: center;
+}
+.time-selectors input {
+  width: 70px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid #8447ff;
+  border-radius: 10px;
+  color: black;
+  font-size: 1.5rem;
+  text-align: center;
+  outline: none;
+}
+
+#addAlarmBtn {
+  background: #8447ff;
+  color: black;
+  padding: 10px 30px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.alarms-list {
+  width: 90%;
+  margin-top: 25px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+#ringingInterface h2{
+color: #8447ff; animation: glow 1s infinite;
+}
+#snoozeBtn{
+  background: orange;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+#stopBtn{
+  background: red;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.alarm-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #8447ff;
+  animation: fadeIn 0.5s ease;
+}
+
+.alarm-info {
+  font-size: 1.4rem;
+  color: black;
+}
+
+.alarm-controls {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #ff4d4d;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 20px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #8447ff;
+}
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
